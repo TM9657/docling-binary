@@ -70,11 +70,11 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
-            cp flow-docling.exe ${{ matrix.artifact_name }}
+            cp dist/flow-docling.exe dist/${{ matrix.artifact_name }}
           else
-            cp flow-docling ${{ matrix.artifact_name }}
+            cp dist/flow-docling dist/${{ matrix.artifact_name }}
           fi
-          echo "binary_path=./dist/${{ matrix.artifact_name }}" >> $GITHUB_OUTPUT
+          echo "binary_path=dist/${{ matrix.artifact_name }}" >> $GITHUB_OUTPUT
 
       - name: Upload binary to artifacts
         uses: actions/upload-artifact@v4
