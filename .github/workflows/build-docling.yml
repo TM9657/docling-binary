@@ -33,21 +33,23 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-          cache: 'pip'
-          cache-dependency-path: 'requirements*.txt'
+          cache: 'poetry'
+      
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Cache build directory
+      - name: Cache Poetry virtualenvs
         uses: actions/cache@v3
         with:
-          path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('./**/*.py') }}
+          path: ~/.cache/pypoetry/virtualenvs
+          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-build-
+            poetry-${{ runner.os }}-
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller docling rtree
+        run: poetry install --no-interaction --no-root
 
       - name: Install UPX
         run: |
@@ -62,8 +64,16 @@ jobs:
         shell: bash
 
       - name: Build binary
+        shell: bash
         run: |
-          pyinstaller --onefile --name flow-docling --noconfirm --upx-dir="$(which upx | xargs dirname)" --collect-all docling_parse main.py
+          STRIP_FLAG=""
+          if [[ "${{ runner.os }}" != "Windows" ]]; then
+            STRIP_FLAG="--strip"
+          fi
+          poetry run pyinstaller --onefile --name flow-docling --noconfirm \
+            $STRIP_FLAG \
+            --upx-dir="$(which upx | xargs dirname)" \
+            --collect-all docling_parse main.py
 
       - name: Prepare binary for upload
         id: prepare-binary

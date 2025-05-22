@@ -3,17 +3,32 @@ name = "docling-binary"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Felix Schultz",email = "felix.schultz@good-co.de"}
+    {name = "Felix Schultz (TM9657 GmbH)",email = "felix.schultz@good-co.de"}
 ]
 readme = "README.md"
-requires-python = ">=3.9, <4.0"
+requires-python = ">=3.9,<3.14"
 dependencies = [
-    "docling (>=2.32.0,<3.0.0)"
+    "docling (>=2.33.0,<3.0.0)",
+    "pyinstaller (>=6.13.0,<7.0.0)",
+    "torch (>=2.7.0,<3.0.0)",
+    "torchvision (>=0.22.0,<0.23.0)"
 ]
 
 [tool.poetry]
 package-mode = false
 
+[[tool.poetry.source]]
+name = "pytorch_cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+
+[tool.poetry.dependencies]
+torch = {source = "pytorch_cpu"}
+torchvision = {source = "pytorch_cpu"}
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+build = "poetry run pyinstaller --onefile --name flow-docling --noconfirm --upx-dir='$(which upx | xargs dirname)' --collect-all docling_parse main.py"
