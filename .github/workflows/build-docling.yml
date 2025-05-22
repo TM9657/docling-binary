@@ -24,7 +24,9 @@ jobs:
             artifact_name: flow-docling-macos-x64
           - os: macos-latest
             artifact_name: flow-docling-macos-arm64
-
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -49,7 +51,9 @@ jobs:
             poetry-${{ runner.os }}-
 
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
+        run: |
+          poetry lock --no-cache --regenerate
+          poetry install --no-interaction --no-root
 
       - name: Install UPX
         run: |
