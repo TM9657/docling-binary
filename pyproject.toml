@@ -20,12 +20,22 @@ optional = true
 
 # https://github.com/pytorch/pytorch/blob/main/RELEASE.md#release-compatibility-matrix
 [tool.poetry.group.cuda.dependencies]
-torch = { version = "^2.7", source = "pytorch-cuda", markers = "extra=='cuda' and extra!='cpu'" }
-torchvision = { version = "^0.22", source = "pytorch-cuda", markers = "extra=='cuda' and extra!='cpu'" }
+torch = { version = "^2.7", source = "pytorch-cuda", markers = "extra=='cuda' and extra!='cpu' and extra!='blank'" }
+torchvision = { version = "^0.22", source = "pytorch-cuda", markers = "extra=='cuda' and extra!='cpu' and extra!='blank'" }
 
-[tool.poetry.extras]
-cpu = ["torch", "torchvision"]
-cuda = ["torch", "torchvision"]
+[tool.poetry.group.blank]
+optional = true
+
+[tool.poetry.group.blank.dependencies]
+torch = { version = "==2.2.2", source = "pytorch-cuda", markers = "extra=='blank' and extra!='cpu' and extra!='cuda'" }
+torchvision = { version = "==0.17.2", source = "pytorch-cuda", markers = "extra=='blank' and extra!='cpu' and extra!='cuda'" }
+
+[tool.poetry.group.cpu]
+optional = true
+
+[tool.poetry.group.cpu.dependencies]
+torch = { version = "^2.7", source = "pytorch-cpu", markers = "extra=='cpu' and extra!='blank' and extra!='cuda'" }
+torchvision = { version = "^0.22", source = "pytorch-cpu", markers = "extra=='cpu' and extra!='blank' and extra!='cuda'" }
 
 [[tool.poetry.source]]
 name = "pytorch-cuda"
@@ -37,9 +47,15 @@ name = "pytorch-cpu"
 priority = "explicit"
 url = "https://download.pytorch.org/whl/cpu"
 
-[tool.poetry.dependencies]
-torch = { version = "^2.7", source = "pytorch-cpu", markers = "extra=='cpu' and extra!='cuda'" }
-torchvision = { version = "^0.22", source = "pytorch-cpu", markers = "extra=='cpu' and extra!='cuda'" }
+ [tool.poetry.extras]
+cpu  = ["torch", "torchvision"]
+cuda = ["torch", "torchvision"]
+blank = ["torch", "torchvision"]
+
+ [project.optional-dependencies]
+cpu  = ["torch", "torchvision"]
+cuda = ["torch", "torchvision"]
+blank = ["torch", "torchvision"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -47,13 +63,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 build = "poetry run pyinstaller --onefile --name flow-docling --noconfirm --upx-dir='$(which upx | xargs dirname)' --collect-all docling_parse main.py"
-
-[project.optional-dependencies]
-cpu = [
-  "torch>=2.7,<3.0.0",
-  "torchvision>=0.22,<1.0.0",
-]
-cuda = [
-  "torch>=2.7,<3.0.0",
-  "torchvision>=0.22,<1.0.0",
-]

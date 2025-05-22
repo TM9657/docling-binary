@@ -61,12 +61,12 @@ jobs:
       - name: Install dependencies (Only Linux X86_64)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          poetry sync -E cpu
+          poetry sync -E cpu --with cpu
 
       - name: Install dependencies (Only Intel Mac)
         if: matrix.os == 'macos-13'
         run: |
-          poetry sync
+          poetry sync -E blank --with blank
 
       - name: Install dependencies
         if: matrix.os != 'ubuntu-latest' && matrix.os != 'macos-13'
