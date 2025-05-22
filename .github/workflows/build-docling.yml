@@ -18,8 +18,8 @@ jobs:
             artifact_name: flow-docling-linux-arm
           - os: windows-latest
             artifact_name: flow-docling-windows-x64.exe
-          - os: windows-11-arm
-            artifact_name: flow-docling-windows-arm.exe
+          # - os: windows-11-arm
+          #   artifact_name: flow-docling-windows-arm.exe
           - os: macos-13
             artifact_name: flow-docling-macos-x64
           - os: macos-latest
@@ -111,6 +111,5 @@ jobs:
             artifacts/flow-docling-linux-x64/flow-docling-linux-x64
             artifacts/flow-docling-linux-arm/flow-docling-linux-arm
             artifacts/flow-docling-windows-x64.exe/flow-docling-windows-x64.exe
-            artifacts/flow-docling-windows-arm.exe/flow-docling-windows-arm.exe
             artifacts/flow-docling-macos-x64/flow-docling-macos-x64
             artifacts/flow-docling-macos-arm64/flow-docling-macos-arm64
