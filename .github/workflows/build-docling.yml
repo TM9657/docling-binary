@@ -63,8 +63,13 @@ jobs:
         run: |
           poetry sync -E cpu
 
+      - name: Install dependencies (Only Intel Mac)
+        if: matrix.os == 'macos-13'
+        run: |
+          poetry sync
+
       - name: Install dependencies
-        if: matrix.os != 'ubuntu-latest'
+        if: matrix.os != 'ubuntu-latest' && matrix.os != 'macos-13'
         run: |
           poetry sync -E cuda --with cuda
 
