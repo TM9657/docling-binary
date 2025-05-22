@@ -50,10 +50,15 @@ jobs:
           restore-keys: |
             poetry-${{ runner.os }}-
 
-      - name: Install dependencies
+      - name: Install dependencies (Only Linux X86_64)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          poetry lock --no-cache --regenerate
-          poetry install --no-interaction --no-root
+          poetry sync -E cpu
+
+      - name: Install dependencies
+        if: matrix.os != 'ubuntu-latest'
+        run: |
+          poetry sync -E cuda --with cuda
 
       - name: Install UPX
         run: |
