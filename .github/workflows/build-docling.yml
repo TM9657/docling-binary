@@ -40,8 +40,8 @@ jobs:
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+          virtualenvs-create: false
+          virtualenvs-in-project: false
 
       - name: Load cached venv
         id: cached-pip-wheels
@@ -58,20 +58,9 @@ jobs:
           restore-keys: |
             poetry-${{ runner.os }}-
 
-      - name: Install dependencies (Only Linux X86_64)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          poetry sync -E cpu --with cpu
-
-      - name: Install dependencies (Only Intel Mac)
-        if: matrix.os == 'macos-13'
-        run: |
-          poetry sync -E blank --with blank
-
       - name: Install dependencies
-        if: matrix.os != 'ubuntu-latest' && matrix.os != 'macos-13'
         run: |
-          poetry sync -E cuda --with cuda
+          poetry install --no-interaction --no-root
 
       - name: Install UPX
         run: |
@@ -92,10 +81,16 @@ jobs:
           if [[ "${{ runner.os }}" != "Windows" ]]; then
             STRIP_FLAG="--strip"
           fi
-          poetry run pyinstaller --onefile --name flow-docling --noconfirm \
+          poetry run pyinstaller \
+            --onefile \
+            --name flow-docling \
+            --noconfirm \
             $STRIP_FLAG \
             --upx-dir="$(which upx | xargs dirname)" \
-            --collect-all docling_parse main.py
+            --collect-all easyocr \
+            --collect-all docling \
+            --collect-all docling_parse \
+            main.py
 
       - name: Prepare binary for upload
         id: prepare-binary
