@@ -88,6 +88,7 @@ jobs:
             $STRIP_FLAG \
             --upx-dir="$(which upx | xargs dirname)" \
             --collect-all easyocr \
+            --collect-all transformers \
             --collect-all docling \
             --collect-all docling_parse \
             main.py
