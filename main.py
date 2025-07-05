@@ -10,7 +10,7 @@ from fastapi.responses import StreamingResponse
 from contextlib import asynccontextmanager
 from docling_core.types.doc import ImageRefMode
 from docling.datamodel.document import ConversionResult
-
+from docling.utils.model_downloader import download_models
 from convert import convert_files
 from docling.datamodel.pipeline_options import (
     PdfBackend,
