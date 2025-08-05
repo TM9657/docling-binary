@@ -60,6 +60,11 @@ def package_output(result: ConversionResult, output_dir: Path, base_name: str, i
             zipf.write(img_file, arcname=f"images/{img_file.name}")
     return zip_path
 
+@app.get("/health")
+async def health():
+    """Health check endpoint"""
+    return {"status": "healthy", "message": "Service is running"}
+
 @app.post("/convert")
 async def convert(
     file: UploadFile = File(...),
