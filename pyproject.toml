@@ -23,7 +23,7 @@ easyocr = "^1.7.2"
 torch = [
   # MacOS
   { version = "==2.2.2", source="pytorch-pypy", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'"},
-  { version = "^2.7", source="pytorch-pypy", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"},
+  { version = "^2.7", source="pytorch-pypy", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
   
   # Linux
   { version = "^2.7", source  = "pytorch-pypy", markers = "sys_platform == 'linux' and platform_machine != 'x86_64'"},
