@@ -18,7 +18,7 @@ from docling.datamodel.pipeline_options import (
 
 WEIGHTS_PATH = os.environ.get("HF_HOME", None)
 IMAGE_RESOLUTION_SCALE = 2.0
-LOCK_FILE = ".models_downloaded.lock"
+LOCK_FILE = ".models_downloaded.lock2"
 THREADS = None
 
 @asynccontextmanager

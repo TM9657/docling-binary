@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Annotated, Dict, List, Optional, Type
 
 import rich.table
+import torch
 import typer
 from docling_core.transforms.serializer.html import (
     HTMLDocSerializer,
@@ -82,6 +83,12 @@ _log = logging.getLogger(__name__)
 
 console = Console()
 err_console = Console(stderr=True)
+
+IS_MAC_ARM = sys.platform == "darwin" and platform.machine().lower() in {"arm64", "aarch64"}
+DEFAULT_ACCELERATOR_DEVICE = AcceleratorDevice.MPS if IS_MAC_ARM else AcceleratorDevice.AUTO
+
+print("MPS built:", torch.backends.mps.is_built())
+print("MPS available:", torch.backends.mps.is_available())
 
 ocr_factory_internal = get_ocr_factory(allow_external_plugins=False)
 ocr_engines_enum_internal = ocr_factory_internal.get_enum()
@@ -257,7 +264,7 @@ def convert_files(  # noqa: C901
     num_threads: Annotated[int, typer.Option(..., help="Number of threads")] = 4,
     device: Annotated[
         AcceleratorDevice, typer.Option(..., help="Accelerator device")
-    ] = AcceleratorDevice.AUTO,
+    ] = DEFAULT_ACCELERATOR_DEVICE,
     tempdir: Optional[str] = None
 ) -> List[ConversionResult]:
     log_format = "%(asctime)s\t%(levelname)s\t%(name)s: %(message)s"
